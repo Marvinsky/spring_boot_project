@@ -10,34 +10,32 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
   private AuthenticationService authenticationService;
 
-  public SecurityConfig(
-      AuthenticationService authenticationService) {
+  public SecurityConfig(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) {
-    auth.authenticationProvider(this.authenticationService).eraseCredentials(false);
+    auth.authenticationProvider(this.authenticationService);
   }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    http.csrf().disable();
+    http.headers().frameOptions().disable();
+
     http.authorizeRequests()
-        .antMatchers("/h2-console/**", "/signup", "/css/**", "/js/**").permitAll()
+        .antMatchers("/h2-console/**","/signup", "/css/**", "/js/**").permitAll()
         .anyRequest().authenticated();
 
-    http.formLogin()
-        .loginPage("/login")
-        .permitAll()
-            .and()
-                .logout()
-                    .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login");
+    http.formLogin().loginPage("/login").permitAll()
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/login");
 
-    http.formLogin()
-        .defaultSuccessUrl("/home", true);
+    http.formLogin().defaultSuccessUrl("/home", true);
   }
 }

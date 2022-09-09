@@ -1,37 +1,36 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
-import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import java.util.List;
+import com.udacity.jwdnd.course1.cloudstorage.mapper.NoteMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class NoteService {
-
   private final NoteMapper noteMapper;
   private final UserService userService;
 
-  public NoteService(NoteMapper noteMapper,
-      UserService userService) {
+  public NoteService(NoteMapper noteMapper, UserService userService) {
     this.noteMapper = noteMapper;
     this.userService = userService;
   }
 
   public List<Note> getNoteListByUserId() {
-    return noteMapper.getNoteByUserId(userService.getUserId());
+    return noteMapper.getNoteListByUserId(userService.getUserId());
   }
 
-  public void createNote(Note note) {
-    note.setUserId(userService.getUserId());
+  public void createNotes(Note note) {
+    note.setUserid(userService.getUserId());
     noteMapper.insert(note);
   }
 
-  public void updateNote(Note note) {
-    note.setUserId(userService.getUserId());
+  public void updateNotes(Note note) {
+    note.setUserid(userService.getUserId());
     noteMapper.update(note);
   }
 
-  public boolean deleteNote(Integer noteId) {
-    return  noteMapper.delete(noteId);
+  public boolean deleteNotes(Integer noteId) {
+    return noteMapper.delete(noteId);
   }
 }

@@ -6,12 +6,13 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/home")
@@ -21,9 +22,7 @@ public class HomeController {
   private final NoteService noteService;
   private final CredentialService credentialService;
 
-  public HomeController(FileService fileService,
-      NoteService noteService,
-      CredentialService credentialService) {
+  public HomeController(FileService fileService, NoteService noteService, CredentialService credentialService) {
     this.fileService = fileService;
     this.noteService = noteService;
     this.credentialService = credentialService;
@@ -31,6 +30,7 @@ public class HomeController {
 
   @GetMapping()
   public String getHomePage(Model model) {
+
     List<File> fileList = fileService.getFileListByUserId();
     boolean fileListEmpty = fileList.isEmpty();
     model.addAttribute("fileListEmpty", fileListEmpty);
@@ -60,4 +60,6 @@ public class HomeController {
     model.addAttribute("warning", warning);
     return "result";
   }
+
+
 }

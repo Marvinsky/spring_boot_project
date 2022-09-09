@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
-
   private final UserService userService;
 
   public SignupController(UserService userService) {
@@ -25,22 +24,22 @@ public class SignupController {
     return "signup";
   }
 
-  @PostMapping
-  public String signupUser(@ModelAttribute User user, Model model, RedirectAttributes redirectAttributes) {
+  @PostMapping()
+  public String signupUser(@ModelAttribute User user, Model model, RedirectAttributes redirectAttrs) {
     String signupError = null;
-    if (!userService.isUserNameAvailable(user.getUserName())) {
-      signupError = "The userName already exists";
+    if (!userService.isUsernameAvailable(user.getUsername())) {
+      signupError = "The username already exists!";
     }
 
     if (signupError == null) {
-      int userCreated = userService.createUser(user);
-      if (userCreated < 0) {
+      int rowsAdded = userService.createUser(user);
+      if (rowsAdded < 0) {
         signupError = "There was an error signing you up. Please try again.";
       }
     }
 
     if (signupError == null) {
-      redirectAttributes.addFlashAttribute("signupSuccess", "You successfully signed up!");
+      redirectAttrs.addFlashAttribute("signupSuccess", "You successfully signed up!");
       return "redirect:/login";
     } else {
       model.addAttribute("signupError", signupError);
